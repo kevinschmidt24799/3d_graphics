@@ -4,6 +4,7 @@
 
 #include "bitmapz.hpp"
 #include "bitmaps/linearization.hpp"
+#include <math.h>
 
 BitmapZ::BitmapZ(int w, int h)
     : Bitmap(w,h)
@@ -11,7 +12,7 @@ BitmapZ::BitmapZ(int w, int h)
     z_buffer_ = new float [width_*height_];
     for (int i = 0; i < width_*height_; ++i)
     {
-        z_buffer_[i] = 0;
+        z_buffer_[i] = std::numeric_limits<float>::lowest();
     }
 }
 
@@ -33,9 +34,15 @@ void BitmapZ::set_pixel(int x, int y, float z, Color const &c)
 
     int i = (x)+width_*(y);
 
+//    if (x == 1010 && y == 505) {
+//        std::cout << "z is " << z_buffer_[i] << '\n';
+//    }
+
     if(z >= z_buffer_[i])
     {
         Bitmap::set_pixel(x,y,c);
+        // std::cout << z_buffer_[i] <<" replaced with "<< z <<std::endl;
+
         z_buffer_[i] = z;
     }
 }
@@ -137,6 +144,13 @@ void BitmapZ::draw_triangle(Matrix<4,1> p1, Matrix<4,1> p2, Matrix<4,1> p3, Colo
 
 }
 
+void BitmapZ::draw_triangle(Triangle t)
+{
+    //std::cout << t.p1_.data_[2][0] << "," << t.p2_.data_[2][0] << "," << t.p3_.data_[3][0] << '\n';
+    draw_triangle(t.p1_, t.p2_, t.p3_, t.c1_, t.c2_, t.c3_);
+}
+
+
 void BitmapZ::horizontal_line(int y, int x1, int x2, float z1, float z2, Color c1, Color c2)
 {
     if(x2 < x1)
@@ -152,7 +166,7 @@ void BitmapZ::horizontal_line(int y, int x1, int x2, float z1, float z2, Color c
     Linearization c1c2g_(x1, x2, c1.g_, c2.g_);
     Linearization c1c2b_(x1, x2, c1.b_, c2.b_);
 
-    std::cout<<z1<<", "<<z2<<"\n";
+    //std::cout<<z1<<", "<<z2<<"\n";
 
     for (int x = x1; x <=x2 ; ++x)
     {
@@ -163,3 +177,47 @@ void BitmapZ::horizontal_line(int y, int x1, int x2, float z1, float z2, Color c
         z.next();
     }
 }
+
+
+Triangle Triangle::transform(Matrix<4,4> const &m) const
+{
+    return Triangle(m*p1_,m*p2_, m*p3_, c1_, c2_, c3_);
+}
+
+TriangleList disc(float r, float height, int segments, Color c)
+{
+    TriangleList out;
+
+    Matrix<4,1> o1({{0},{0},{height/2},{1}});
+    Matrix<4,1> p11({{r*(float)cos(M_PI/segments*0)},{r*(float)sin(M_PI/segments*0)},{height/2},{1}});
+    Matrix<4,1> p12({{r*(float)cos(M_PI/segments*1)},{r*(float)sin(M_PI/segments*1)},{height/2},{1}});
+
+    Matrix<4,1> o2({{0},{0},{-height/2},{1}});
+    Matrix<4,1> p21({{r*(float)cos(M_PI/segments*0.5)},{r*(float)sin(M_PI/segments*0.5)},{-height/2},{1}});
+    Matrix<4,1> p22({{r*(float)cos(M_PI/segments*1.5)},{r*(float)sin(M_PI/segments*1.5)},{-height/2},{1}});
+
+    Color c1 = c;
+
+    for (int i = 0; i < 2*segments; ++i)
+    {
+        out.push_back(Triangle(o1, p11, p12, c1));
+        out.push_back(Triangle(p11, p12,p21, c1));
+        out.push_back(Triangle(o2, p21, p22,  c1));
+        out.push_back(Triangle(p21, p22, p12, c1));
+
+        c1.invert();
+
+        o1 = rotate(180.0/segments, 0,0,1)*o1;
+        o2 = rotate(180.0/segments, 0,0,1)*o2;
+        p11 = rotate(180.0/segments, 0,0,1)*p11;
+        p12 = rotate(180.0/segments, 0,0,1)*p12;
+        p21 = rotate(180.0/segments, 0,0,1)*p21;
+        p22 = rotate(180.0/segments, 0,0,1)*p22;
+
+    }
+    return out;
+}
+
+
+
+

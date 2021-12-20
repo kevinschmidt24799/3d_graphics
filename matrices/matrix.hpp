@@ -124,6 +124,7 @@ public:
     Matrix& normalize()
     {
         assert(COLUMNS == 1);
+        //assert(data_[ROWS-1][0] > 1e-8);
         for (int i = 0; i < ROWS; ++i)
         {
             data_[i][0]/=data_[ROWS-1][0];
@@ -171,6 +172,6 @@ Matrix<4,4> scale(float sx, float sy, float sz);
 
 Matrix<4,4> scale3d(float s);
 
-Matrix<4,4> perspective();
+Matrix<4,4> perspective(float altitude);
 
 #endif //CLASSES_MATRIX_HPP

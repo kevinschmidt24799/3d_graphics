@@ -90,10 +90,17 @@ Matrix<4,4> scale3d(float s)
     return scale(s,s,s);
 }
 
-Matrix<4,4> perspective()
+Matrix<4,4> perspective(float altitude)
 {
     Matrix<4,4> out;
-    out.data_[3][3] = 0;
-    out.data_[3][2] = 1;
-    return out;
+//    out.data_[3][3] = 0;
+//    out.data_[3][2] = -3.0/2;
+//    out.data_[2][3] = -1;
+//    out.data_[2][2] = -3.0/2;
+    out.data_[3][3] = 0.0;
+    out.data_[3][2] = -1.0;
+    out.data_[2][2] = -1.0;
+    out.data_[2][3] = -1.0;
+
+    return out * translate(0,0,altitude);
 }

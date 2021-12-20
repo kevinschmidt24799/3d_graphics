@@ -28,6 +28,14 @@ public:
         a_ = a;
     }
 
+    void invert()
+    {
+        r_ = 255 - r_;
+        g_ = 255 - g_;
+        b_ = 255 - b_;
+        a_ = 255 - a_;
+    }
+
 };
 
 inline Color white(255,255,255);
