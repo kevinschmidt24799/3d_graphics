@@ -23,13 +23,22 @@ Linearization::Linearization(int d1, int d2, int r1, int r2, int i)
     {
         dr_ = -dr_;
         rdirection_ = -1;
+    }else if(dr_==0)
+    {
+        rincrement_ = 0;
+        rdirection_ = 0;
     }
 
     D_ = 0;
     d_ = d1_;
     r_ = r1_;
 
-    rincrement_ = abs(dr_/dd_);
+    if (dd_!=0)
+    {
+        rincrement_ = abs(dr_/dd_);
+    }else{
+        rincrement_ = 0;
+    }
 
     dr_%=dd_;
     dr_ = abs(dr_);

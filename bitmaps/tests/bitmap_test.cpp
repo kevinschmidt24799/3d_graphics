@@ -111,6 +111,7 @@ TEST(bitmap, increment)
     EXPECT_TRUE(test(0, -10, 0,28));
 
     EXPECT_TRUE(test(0,-10, 0,-28));
+    EXPECT_TRUE(test(0,0,2,2));
 }
 
 TEST(bitmap, triangle)
