@@ -7,6 +7,7 @@
 #include "bitmaps/bitmapz.hpp"
 #include "bitmaps/linearization.hpp"
 #include <vector>
+#include "bitmaps/shape.hpp"
 
 Color color_maker(float x, float y, float time)
 {
@@ -189,20 +190,20 @@ TEST(bitmap, pyramid_list)
 
 TEST(bitmap, disc)
 {
-    TriangleList triangles = disc(0.5, 0.1, 8);
+    std::shared_ptr<TriangleList> triangles = disc(0.5, 0.1, 8);
 
     for (int t = 0; t < 360; ++t)
     {
-        BitmapZ b(2000,1000);
+        BitmapZ b(500,500);
         b.fill_all(Color(0,0,0));
 
         Matrix<4,4> view = b.map_to_image(-2,2,-2,2)*perspective(3);
 
-        Matrix<4,4> transformc = rotate(2*t,1,1,0)* scale3d(0.3+t/90.0);
+        Matrix<4,4> transform = translate(0,0,(float)t/-130)*rotate(2*t,1,1,0);
 
-        for (Triangle const &t : triangles)
+        for (Triangle const &t : *triangles)
         {
-            b.draw_triangle(t.transform(view*transformc));
+            b.draw_triangle(t.transform(view*transform));
         }
         char temp[256];
         sprintf(temp, "/Users/kevinschmidt/Desktop/cppbmp4/test-%03d.bmp", t);
@@ -212,4 +213,70 @@ TEST(bitmap, disc)
 }
 
 
+TEST(bitmap, shape)
+{
+    Shape s(disc(2,0.2,6),
+            [](float t)
+            {
+                return motion_linear(t, Matrix<4,1>{{1},{1},{-1},{0}}, 0, 2.5)
+                      *motion_linear(t, Matrix<4,1>{{1},{1},{-1},{0}}*-1, 2.5, 5)
+                      *motion_rotate(t, 360/2.5, 1,1,1,0,2.5)
+                      *rotate(90,1,0,0);
+            });
 
+    s.make_frames(1700,1000, perspective(5),0,5, 60, "/Users/kevinschmidt/Desktop/cppbmp5/test-%03d.bmp", -2, 2, -2, 2);
+
+}
+
+TEST(bitmap, motion_linear)
+{
+    for (float t = 1; t < 5; t+=1.0/60)
+    {
+        std::cout << motion_linear(t, Matrix<4,1>{{1},{1},{-3},{0}}, 0, 5);
+    }
+}
+
+
+TEST(bitmap, crazy_shapes)
+{
+    Shape s(nullptr,
+            [](float t)
+            {
+                return motion_linear(t, Matrix<4,1>{{0},{-2},{2},{0}}, 0, 2)
+                       *motion_linear(t, Matrix<4,1>{{-2},{2},{0},{0}}, 2, 4)
+                       *motion_linear(t, Matrix<4,1>{{0},{-2},{-2},{0}}, 4, 6)
+                       *motion_linear(t, Matrix<4,1>{{2},{2},{0},{0}}, 6, 8)
+                       *translate(2.5,2.5,-2.5)
+                       *motion_rotate(t, 360/2.5, 1,1,1,0,2)
+                       *motion_rotate(t, 360/2.5, 1,1,1,4,8)
+                       *rotate(90,1,0,0);
+            });
+
+    auto gear = disc(1,0.2,6);
+    s.sub_shapes_.emplace_back(Shape(gear, [](float t)
+        {
+            return motion_rotate(t, 180, 1,0,0,0,8)
+                  *translate(1,0,0)
+                  *rotate(-90,0,1,0);
+        }));
+    s.sub_shapes_.emplace_back(Shape(gear, [](float t)
+    {
+        return motion_rotate(t, -180, 1,0,0,0,8)
+               *translate(-1,0,0)
+               *rotate(90,0,1,0);
+    }));
+    s.sub_shapes_.emplace_back(Shape(gear, [](float t)
+    {
+        return motion_rotate(t, -180, 0,1,0,0,8)
+               *translate(0,1,0)
+               *rotate(-90,1,0,0);
+    }));
+    s.sub_shapes_.emplace_back(Shape(gear, [](float t)
+    {
+        return motion_rotate(t, 180, 0,1,0,0,8)
+               *translate(0,-1,0)
+               *rotate(90,1,0,0);
+    }));
+    s.make_frames(3440,1440, scale3d(3)*perspective(10),0,8, 60, "/Users/kevinschmidt/Desktop/cppbmp5/test-%03d.bmp", -2, 2, -2, 2);
+
+}

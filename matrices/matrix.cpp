@@ -104,3 +104,33 @@ Matrix<4,4> perspective(float altitude)
 
     return out * translate(0,0,altitude);
 }
+
+Matrix<4,4> translate(Matrix<4,1> const & d)
+{
+    return translate(d.data_[0][0], d.data_[1][0], d.data_[2][0]);
+}
+
+Matrix<4,4> motion_linear(float t, Matrix<4,1> v, float t1, float t2)
+{
+    assert(t2 > t1);
+    if(t > t2) t = t2;
+    if(t < t1) t = t1;
+    return translate(v*(t-t1));
+}
+
+Matrix<4,4> motion_rotate(float t, float angular_velocity, float l, float m, float n,float t1, float t2)
+{
+    assert(t2 > t1);
+    if(t > t2) t = t2;
+    if(t < t1) t = t1;
+    return rotate(t*angular_velocity,l,m,n);
+}
+
+
+
+Matrix<4,4> motion_circular(float t, float radius, float angular_velocity, float starting_angle)
+{
+
+}
+
+

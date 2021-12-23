@@ -26,7 +26,8 @@ target_link_libraries(matrix_test matrices GTest::gtest GTest::gtest_main)
 add_library(bitmaps
         bitmaps/bitmap.cpp bitmaps/bitmap.hpp
         bitmaps/bitmapz.hpp bitmaps/bitmapz.cpp
-        bitmaps/linearization.cpp bitmaps/linearization.hpp)
+        bitmaps/linearization.cpp bitmaps/linearization.hpp
+        bitmaps/shape.cpp bitmaps/shape.hpp)
 target_include_directories(bitmaps PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(bitmaps matrices)
 

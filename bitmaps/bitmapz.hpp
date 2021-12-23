@@ -36,10 +36,11 @@ public:
 
     void horizontal_line(int y, int x1, int x2, float z1, float z2, Color c1, Color c2);
 
+    void fill_all(const Color &c);
 
 };
 
-TriangleList disc(float r, float height, int segments, Color c = Color(255,0,255));
+std::shared_ptr<TriangleList> disc(float r, float height, int segments, Color c = Color(255,0,255), Color c2 = Color(200,200,200));
 
 
 

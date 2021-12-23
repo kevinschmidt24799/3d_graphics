@@ -121,6 +121,44 @@ public:
         return out;
     }
 
+    Matrix<ROWS, COLUMNS, TYPE> operator+( Matrix<ROWS,COLUMNS,TYPE> const &other) const
+    {
+        using result_type = typeof(data_[0][0] + other.data_[0][0]);
+        Matrix<ROWS, COLUMNS, result_type> out;
+
+        for (int row = 0; row < ROWS; ++row)
+        {
+            for (int column = 0; column < COLUMNS; ++column)
+            {
+                out.data_[row][column] = data_[row][column] + other.data_[row][column];
+            }
+        }
+
+        return out;
+    }
+
+    Matrix<ROWS, COLUMNS, TYPE> operator-( Matrix<ROWS,COLUMNS,TYPE> const &other) const
+    {
+        return *this + other*(-1);
+    }
+
+    Matrix<ROWS, COLUMNS, TYPE> operator*(float scalar) const
+    {
+        Matrix<ROWS, COLUMNS, TYPE> out;
+
+        for (int i = 0; i < ROWS; ++i)
+        {
+            for (int j = 0; j < COLUMNS; ++j)
+            {
+                out.data_[i][j] = data_[i][j]*scalar;
+            }
+        }
+        return out;
+    }
+
+
+
+
     Matrix& normalize()
     {
         assert(COLUMNS == 1);
@@ -167,11 +205,17 @@ Matrix<3,3> scale(float s);
 Matrix<4,4,float> rotate(float degrees, float l,float m,float n);
 
 Matrix<4,4> translate(float tx, float ty, float tz);
+Matrix<4,4> translate(Matrix<4,1> const & d);
 
 Matrix<4,4> scale(float sx, float sy, float sz);
 
 Matrix<4,4> scale3d(float s);
 
 Matrix<4,4> perspective(float altitude);
+
+
+Matrix<4,4> motion_linear(float t, Matrix<4,1> v, float t1, float t2);
+Matrix<4,4> motion_rotate(float t, float angular_velocity, float l, float m, float n, float t1, float t2);
+Matrix<4,4> motion_circular(float t, float radius, float angular_velocity, float starting_angle);
 
 #endif //CLASSES_MATRIX_HPP
