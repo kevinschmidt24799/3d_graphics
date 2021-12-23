@@ -278,6 +278,6 @@ TEST(bitmap, crazy_shapes)
                *translate(0,-1,0)
                *rotate(90,1,0,0);
     }));
-    s.make_frames(3440,1440, scale3d(3)*perspective(10),0,8, 60, "/Users/kevinschmidt/Desktop/cppbmp5/test-%03d.bmp", -2, 2, -2, 2);
+    s.make_frames(3440,1440, scale3d(3)*perspective(10),0,8, 60, "test-%03d.bmp", -2, 2, -2, 2);
 
 }
