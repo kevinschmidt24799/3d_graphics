@@ -36,11 +36,11 @@ Linearization::Linearization(int d1, int d2, int r1, int r2, int i)
     if (dd_!=0)
     {
         rincrement_ = abs(dr_/dd_);
+        dr_%=dd_;
     }else{
         rincrement_ = 0;
+        dr_= 0;
     }
-
-    dr_%=dd_;
     dr_ = abs(dr_);
     dd_ = abs(dd_);
 }
