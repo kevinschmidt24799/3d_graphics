@@ -200,10 +200,10 @@ std::shared_ptr<TriangleList> disc(float r, float height, int segments, Color c1
     for (int i = 0; i < 2*segments; ++i)
     {
         out->push_back(Triangle(o1, p11, p12, c1));
-        out->push_back(Triangle(o2, p21, p22,  c1));
+        out->push_back(Triangle(o2, p22, p21,  c1));
         c1.invert();
 
-        out->push_back(Triangle(p11, p12,p21, c2));
+        out->push_back(Triangle(p11, p21,p12, c2));
         c2.invert();
 
         out->push_back(Triangle(p21, p22, p12, c2));
@@ -229,3 +229,31 @@ void BitmapZ::fill_all(const Color &c)
         z_buffer_[i] = std::numeric_limits<float>::lowest();
     }
 }
+
+float Triangle::direction(Matrix<4,1> p)
+{
+
+    Matrix<4,1> v12 = p2_-p1_;
+    Matrix<4,1> v13 = p3_-p1_;
+
+    float nx = v12.data_[1][0]*v13.data_[2][0] - v12.data_[2][0]*v13.data_[1][0];
+    float ny = (-1)*(v12.data_[0][0]*v13.data_[2][0] - v12.data_[2][0]*v13.data_[0][0]);
+    float nz = v12.data_[0][0]*v13.data_[1][0] - v12.data_[1][0]*v13.data_[0][0];
+
+    Matrix<4,1> Normal {{nx},{ny},{nz},{1}};
+
+    Matrix<4,1> d = p-(p1_ + p2_ + p3_)/3;
+
+    float dot_prod = d.data_[0][0]*Normal.data_[0][0] + d.data_[1][0]*Normal.data_[1][0] + d.data_[2][0]*Normal.data_[2][0];
+
+    float cos = dot_prod/(get_magnitude(d)*get_magnitude(Normal));
+
+    return cos;
+}
+
+
+
+
+
+
+

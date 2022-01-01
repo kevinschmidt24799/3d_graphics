@@ -156,6 +156,11 @@ public:
         return out;
     }
 
+    Matrix<ROWS, COLUMNS, TYPE> operator/(float scalar) const
+    {
+        return (*this *(1/scalar));
+    }
+
 
 
 
@@ -192,6 +197,8 @@ auto error(Matrix<ROWS2,COLUMNS2,TYPE1> const &a, Matrix<ROWS2,COLUMNS2,TYPE2> c
     return error;
 
 }
+
+float get_magnitude(Matrix<4,1> const & m);
 
 Matrix<3,3,float> rotate(float degrees);
 

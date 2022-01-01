@@ -18,6 +18,7 @@ struct Triangle
         :p1_(p1), p2_(p2), p3_(p3), c1_(c), c2_(c), c3_(c){}
 
     Triangle transform(Matrix<4,4> const &m) const;
+    float direction(Matrix<4,1> p);
 };
 
 typedef std::vector<Triangle> TriangleList;

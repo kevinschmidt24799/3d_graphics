@@ -133,4 +133,12 @@ Matrix<4,4> motion_circular(float t, float radius, float angular_velocity, float
 
 }
 
+float get_magnitude(Matrix<4,1> const & m)
+{
+    float mag = m.data_[0][0]*m.data_[0][0] + m.data_[1][0]*m.data_[1][0]+m.data_[2][0]*m.data_[2][0];
+    mag = sqrt(mag);
+    return mag;
+
+
+}
 
