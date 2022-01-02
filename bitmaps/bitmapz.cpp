@@ -39,7 +39,7 @@ void BitmapZ::set_pixel(int x, int y, float z, Color const &c)
 //        std::cout << "z is " << z_buffer_[i] << '\n';
 //    }
 
-    if(z >= z_buffer_[i])
+    if(z > z_buffer_[i])
     {
         Bitmap::set_pixel(x,y,c);
         // std::cout << z_buffer_[i] <<" replaced with "<< z <<std::endl;
@@ -151,6 +151,15 @@ void BitmapZ::draw_triangle(Triangle t)
     draw_triangle(t.p1_, t.p2_, t.p3_, t.c1_, t.c2_, t.c3_);
 }
 
+void BitmapZ::draw_triangle(Triangle t, float brightness)
+{
+
+    draw_triangle(t.p1_, t.p2_, t.p3_, t.c1_.set_brightness(brightness),
+                                                  t.c2_.set_brightness(brightness),
+                                                  t.c3_.set_brightness(brightness));
+}
+
+
 
 void BitmapZ::horizontal_line(int y, int x1, int x2, float z1, float z2, Color c1, Color c2)
 {
@@ -201,13 +210,13 @@ std::shared_ptr<TriangleList> disc(float r, float height, int segments, Color c1
     {
         out->push_back(Triangle(o1, p11, p12, c1));
         out->push_back(Triangle(o2, p22, p21,  c1));
-        c1.invert();
+        //c1.invert();
 
         out->push_back(Triangle(p11, p21,p12, c2));
-        c2.invert();
+        //c2.invert();
 
         out->push_back(Triangle(p21, p22, p12, c2));
-        c2.invert();
+        //c2.invert();
 
 
         o1 = rotate(180.0/segments, 0,0,1)*o1;
@@ -216,7 +225,6 @@ std::shared_ptr<TriangleList> disc(float r, float height, int segments, Color c1
         p12 = rotate(180.0/segments, 0,0,1)*p12;
         p21 = rotate(180.0/segments, 0,0,1)*p21;
         p22 = rotate(180.0/segments, 0,0,1)*p22;
-
     }
     return out;
 }
@@ -230,11 +238,11 @@ void BitmapZ::fill_all(const Color &c)
     }
 }
 
-float Triangle::direction(Matrix<4,1> p)
+float Triangle::direction(Matrix<4,1> const & p) const
 {
 
-    Matrix<4,1> v12 = p2_-p1_;
-    Matrix<4,1> v13 = p3_-p1_;
+    Matrix<4,1> v12 = p3_-p1_;
+    Matrix<4,1> v13 = p2_-p1_;
 
     float nx = v12.data_[1][0]*v13.data_[2][0] - v12.data_[2][0]*v13.data_[1][0];
     float ny = (-1)*(v12.data_[0][0]*v13.data_[2][0] - v12.data_[2][0]*v13.data_[0][0]);
@@ -242,6 +250,8 @@ float Triangle::direction(Matrix<4,1> p)
 
     Matrix<4,1> Normal {{nx},{ny},{nz},{1}};
 
+
+    //std::cout << Normal;
     Matrix<4,1> d = p-(p1_ + p2_ + p3_)/3;
 
     float dot_prod = d.data_[0][0]*Normal.data_[0][0] + d.data_[1][0]*Normal.data_[1][0] + d.data_[2][0]*Normal.data_[2][0];

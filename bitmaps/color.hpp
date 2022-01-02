@@ -4,7 +4,7 @@
 
 #ifndef CLASSES_COLOR_HPP
 #define CLASSES_COLOR_HPP
-
+#include "assert.h"
 
 
 class Color
@@ -36,6 +36,7 @@ public:
         a_ = 255 - a_;
     }
 
+    Color set_brightness(float brightness);
 };
 
 inline Color white(255,255,255);

@@ -27,7 +27,8 @@ add_library(bitmaps
         bitmaps/bitmap.cpp bitmaps/bitmap.hpp
         bitmaps/bitmapz.hpp bitmaps/bitmapz.cpp
         bitmaps/linearization.cpp bitmaps/linearization.hpp
-        bitmaps/shape.cpp bitmaps/shape.hpp)
+        bitmaps/shape.cpp bitmaps/shape.hpp
+        bitmaps/color.cpp bitmaps/color.hpp)
 target_include_directories(bitmaps PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(bitmaps matrices)
 

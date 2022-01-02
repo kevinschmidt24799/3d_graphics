@@ -225,7 +225,8 @@ TEST(bitmap, shape)
                       *rotate(90,1,0,0);
             });
 
-    s.make_frames(1700,1000, perspective(5),5,0,5, 60, "/Users/kevinschmidt/Desktop/cppbmp5/test-%03d.bmp", -2, 2, -2, 2);
+    s.make_frames(1700,1000, perspective(5),5,0,5, 60,
+                  "/Users/kevinschmidt/Desktop/cppbmp5/test-%03d.bmp", -2, 2, -2, 2, Matrix<4,1>({{10},{10},{10},{1}}));
 
 }
 
@@ -253,7 +254,7 @@ TEST(bitmap, crazy_shapes)
                        *rotate(90,1,0,0);
             });
 
-    auto gear = disc(1,0.2,6);
+    auto gear = disc(1,0.2,30,Color(200,200,200),Color(200,200,200));
     s.sub_shapes_.emplace_back(Shape(gear, [](float t)
         {
             return motion_rotate(t, 180, 1,0,0,0,8)
@@ -278,6 +279,7 @@ TEST(bitmap, crazy_shapes)
                *translate(0,-1,0)
                *rotate(90,1,0,0);
     }));
-    s.make_frames(3440,1440, scale3d(3), 10,0,8, 20, "test-%03d.bmp", -2, 2, -2, 2);
+    s.make_frames(2000, 2000,scale3d(6), 10,0,8, 60,
+                  "test-%03d.bmp", -2, 2, -2, 2, Matrix<4,1>({{5},{0},{10},{1}}));
 
 }

@@ -18,7 +18,7 @@ struct Triangle
         :p1_(p1), p2_(p2), p3_(p3), c1_(c), c2_(c), c3_(c){}
 
     Triangle transform(Matrix<4,4> const &m) const;
-    float direction(Matrix<4,1> p);
+    float direction(Matrix<4,1> const & p) const;
 };
 
 typedef std::vector<Triangle> TriangleList;
@@ -34,6 +34,7 @@ public:
     void set_pixel(int x, int y, float z, Color const &c);
     void draw_triangle(Matrix<4,1> p1, Matrix<4,1> p2, Matrix<4,1> p3, Color c1 = white, Color c2 = white, Color c3 = white);
     void draw_triangle(Triangle t);
+    void draw_triangle(Triangle t, float brightness);
 
     void horizontal_line(int y, int x1, int x2, float z1, float z2, Color c1, Color c2);
 

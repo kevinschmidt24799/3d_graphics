@@ -22,8 +22,11 @@ public:
 
     virtual Matrix<4,4> get_transform(float t) const { return transform_(t); }
 
-    void draw(BitmapZ &b, Matrix<4,4> const &pov, Matrix<4,4> const &transform, float altitude, float t) const;
-    void make_frames(int width, int height, Matrix<4,4> pov, float altitude, float t1, float t2, float fps, char const * filename, float x1, float x2, float y1, float y2);
+    void draw(BitmapZ &b, Matrix<4,4> const &pov, Matrix<4,4> const &transform, float altitude,
+              float t, Matrix<4,1> const &light_source) const;
+
+    void make_frames(int width, int height, Matrix<4,4> pov, float altitude, float t1, float t2, float fps,
+                     char const * filename, float x1, float x2, float y1, float y2, Matrix<4,1> const&light_source);
 
 };
 
