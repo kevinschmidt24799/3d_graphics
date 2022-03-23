@@ -5,7 +5,7 @@ This project is a 3d graphics engine that generates bitmaps at a pixel level. It
 The interface allows for creating shapes, which contain subshapes, as well as a list of triangles and a transform. Makeframes() will apply the transform, draw the triangles, the recursively call makframes on subshapes with the same transform. Drawing the triangles is done by a series of linearizations which then draw horizontal lines, pixel by pixel. When this is done, a .bmp file is written out. 
 
 
-<img src="DEMO%20IMAGES/Shapes%20Flowchart.svg" alt="drawing" width="500"/>
+<img src="DEMO%20IMAGES/Shapes%20Flowchart.svg" alt="drawing" width="1000"/>
 
 
 ## Key Features:
