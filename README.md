@@ -1,6 +1,12 @@
 # 3d_graphics
 
-This project is a 3d graphics engine that generates bitmaps at a pixel level. It contains an interface to write single .bmp files, as well as creating successive frames for animation. I used ffmpeg to combine these frames into videos. The structure of the code is as described in the diagram below. 
+This project is a 3d graphics engine that generates bitmaps at a pixel level. It contains an interface to write single .bmp files, as well as creating successive frames for animation. I used ffmpeg to combine these frames into videos. 
+
+The interface allows for creating shapes, which contain subshapes, as well as a list of triangles and a transform. Makeframes() will apply the transform, draw the triangles, the recursively call makframes on subshapes with the same transform. Drawing the triangles is done by a series of linearizations which then draw horizontal lines, pixel by pixel. When this is done, a .bmp file is written out. 
+
+
+<img src="DEMO%20IMAGES/Shapes%20Flowchart.svg" alt="drawing" width="500"/>
+
 
 ## Key Features:
 
@@ -30,3 +36,9 @@ The library supports a simple shading scheme in which the direction of the light
 
 ## Demo:
 
+<img src="DEMO%20IMAGES/test-200.bmp" alt="drawing" width="500"/>
+
+
+Animation Video: https://youtu.be/_tqcd8wNkLk
+
+Colors and Perspective 
